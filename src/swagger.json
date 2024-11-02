@@ -1,0 +1,558 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "FIAP Fast Food",
+    "version": "1.0.0",
+    "description": ""
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Clientes",
+      "description": ""
+    },
+    {
+      "name": "Produtos",
+      "description": ""
+    },
+    {
+      "name": "Pedidos",
+      "description": ""
+    }
+  ],
+  "schemes": ["http"],
+  "paths": {
+    "/customers/{cpf}": {
+      "get": {
+        "summary": "Buscar um cliente por CPF",
+        "description": "Retorna um cliente com base no CPF fornecido",
+        "tags": ["Clientes"],
+        "parameters": [
+          {
+            "name": "cpf",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "O CPF do cliente que deseja buscar (sem pontos e traço)",
+            "default": "43841268080"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cliente encontrado",
+            "schema": {
+              "$ref": "#/definitions/GetCustomerResponse"
+            }
+          },
+          "404": {
+            "description": "Cliente não encontrado"
+          }
+        }
+      }
+    },
+    "/customers/": {
+      "post": {
+        "summary": "Criar um novo cliente",
+        "description": "Cria um novo cliente com base nas informações fornecidas",
+        "tags": ["Clientes"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateCustomerRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Cliente criado com sucesso",
+            "schema": {
+              "$ref": "#/definitions/GetCustomerResponse"
+            }
+          },
+          "409": {
+            "description": "Já existe um cliente com o CPF informado"
+          }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "summary": "Buscar produto por ID",
+        "description": "Retorna um produto com base no ID fornecido",
+        "tags": ["Produtos"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "ID do produto que deseja buscar"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produto encontrado",
+            "schema": {
+              "$ref": "#/definitions/GetProductResponse"
+            }
+          },
+          "404": {
+            "description": "Produto não encontrado"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Atualiza um produto existente",
+        "description": "Atualiza as informações de um produto com base no ID fornecido",
+        "tags": ["Produtos"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do produto a ser atualizado",
+            "type": "integer"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PatchProductRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produto atualizado com sucesso.",
+            "schema": {
+              "$ref": "#/definitions/GetProductResponse"
+            }
+          },
+          "404": {
+            "description": "Produto não encontrado.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "product não encontrado"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove um produto existente",
+        "description": "Remove um produto com base no ID fornecido",
+        "tags": ["Produtos"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do produto a ser removido",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Produto removido com sucesso."
+          },
+          "404": {
+            "description": "Produto não encontrado.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "product não encontrado"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/": {
+      "post": {
+        "summary": "Criar um novo produto",
+        "description": "Cria um novo produto com base nas informações fornecidas",
+        "tags": ["Produtos"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateProductRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produto criado com sucesso",
+            "schema": {
+              "$ref": "#/definitions/GetProductResponse"
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Buscar produto por categoria",
+        "description": "Retorna uma lista de produto que pertencem à categoria fornecida",
+        "tags": ["Produtos"],
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "default": "bebida"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de produtos encontrados",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GetProductResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders/": {
+      "get": {
+        "summary": "Lista ordens por status",
+        "description": "Retorna uma lista de ordens filtradas pelo(s) status fornecido(s)",
+        "tags": ["Pedidos"],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "default": "em_preparacao,pronto"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de ordens retornada com sucesso.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GetOrderResponse"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Cria um novo pedido",
+        "description": "Cria um pedido com um cliente existente e uma lista de produtos válidos",
+        "tags": ["Pedidos"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateOrderRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pedido criado com sucesso",
+            "schema": {
+              "$ref": "#/definitions/GetOrderResponse"
+            }
+          },
+          "404": {
+            "description": "Cliente ou produto não encontrado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "customer não encontrado ou product não encontrado"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders/{id}": {
+      "patch": {
+        "summary": "Atualiza o status de um pedido",
+        "tags": ["Pedidos"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do pedido a ser atualizado",
+            "type": "integer"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PatchOrderRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pedido atualizado com sucesso",
+            "schema": {
+              "$ref": "#/definitions/GetOrderResponse"
+            }
+          },
+          "404": {
+            "description": "Pedido não encontrado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "order não encontrado"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "CreateCustomerRequest": {
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string",
+          "example": "Rich"
+        },
+        "lastName": {
+          "type": "string",
+          "example": "Hickey"
+        },
+        "cpf": {
+          "type": "string",
+          "example": "43841268080"
+        },
+        "email": {
+          "type": "string",
+          "example": "richh@email.com"
+        }
+      },
+      "required": ["firstName", "lastName", "cpf", "email"]
+    },
+    "GetCustomerResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "example": 1
+        },
+        "name": {
+          "type": "string",
+          "example": "Rich Hickey"
+        },
+        "cpf": {
+          "type": "string",
+          "example": "43841268080"
+        },
+        "email": {
+          "type": "string",
+          "example": "richh@email.com"
+        }
+      }
+    },
+    "GetProductResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "example": 1
+        },
+        "name": {
+          "type": "string",
+          "example": "Smash Burguer"
+        },
+        "category": {
+          "type": "string",
+          "example": "lanche"
+        },
+        "price": {
+          "type": "number",
+          "format": "float",
+          "example": 19.99
+        },
+        "description": {
+          "type": "string",
+          "example": "Hamburguer 90g, american cheese, picles e maionese."
+        },
+        "available": {
+          "type": "boolean",
+          "example": true
+        },
+        "image": {
+          "type": "string",
+          "format": "binary",
+          "example": null
+        }
+      },
+      "required": ["id", "name", "category", "price", "available"]
+    },
+    "CreateProductRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "example": "Fritas"
+        },
+        "category": {
+          "type": "string",
+          "enum": ["lanche", "acompanhamento", "bebida", "sobremesa", "outros"],
+          "example": "acompanhamento"
+        },
+        "price": {
+          "type": "number",
+          "minimum": 0.01,
+          "maximum": 1000,
+          "example": 15.90
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "example": "Batata Frita para 2 pessoas"
+        },
+        "available": {
+          "type": "boolean",
+          "default": true,
+          "example": true
+        },
+        "image": {
+          "type": "string",
+          "description": "Imagem encodada em base 64",
+          "example": "iVBORw0KGgoAAAANSUhEUgAAAAUA..."
+        }
+      },
+      "required": ["name", "category", "price"],
+      "additionalProperties": false
+    },
+    "PatchProductRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "example": "Fritas"
+        },
+        "category": {
+          "type": "string",
+          "enum": ["lanche", "acompanhamento", "bebida", "sobremesa", "outros"],
+          "example": "acompanhamento"
+        },
+        "price": {
+          "type": "number",
+          "minimum": 0.01,
+          "maximum": 1000,
+          "example": 13.99
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "example": "Batata Frita crocante e sequinha"
+        },
+        "available": {
+          "type": "boolean",
+          "example": false
+        },
+        "image": {
+          "type": "string",
+          "description": "Imagem encodada em base 64",
+          "example": "iVBORw0KGgoAAAANSUhEUgAAAAUA..."
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetOrderResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "ID da ordem"
+        },
+        "status": {
+          "type": "string",
+          "description": "Status atual da ordem"
+        },
+        "orderNumber": {
+          "type": "string",
+          "description": "Número da ordem"
+        }
+      },
+      "required": ["id", "status", "orderNumber"]
+    },
+    "CreateOrderRequest": {
+      "type": "object",
+      "properties": {
+        "customerId": {
+          "type": "integer",
+          "description": "ID do cliente que está realizando o pedido"
+        },
+        "products": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "productId": {
+                "type": "integer",
+                "description": "ID do produto"
+              },
+              "quantity": {
+                "type": "integer",
+                "description": "Quantidade do produto no pedido",
+                "minimum": 1
+              }
+            },
+            "required": ["productId", "quantity"]
+          },
+          "minItems": 1,
+          "description": "Lista de produtos e quantidades a serem incluídos no pedido"
+        }
+      },
+      "required": ["customerId", "products"],
+      "additionalProperties": false
+    },
+    "PatchOrderRequest": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "description": "Novo status do pedido",
+          "enum": ["recebido", "em_preparacao", "pronto", "finalizado"]
+        }
+      },
+      "required": ["status"],
+      "additionalProperties": false
+    }
+  }
+}
