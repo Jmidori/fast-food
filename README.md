@@ -52,7 +52,7 @@ Responsável pela transformação e adaptação de schemas, de acordo com as esp
 - **Uso de Bibliotecas Auxiliares**: Evitou-se a utilização excessiva de bibliotecas externas (como validadores de email e CPF) para manter a leveza do projeto. Em um cenário real, tais validações seriam necessárias para garantir a integridade dos dados.
 - **Foco no MVP**: Este projeto está em fase inicial, focado em um MVP (Minimum Viable Product). Considerações como escalabilidade e concorrência não foram abordadas, mas são pontos futuros.
 - **Filas e Gerenciamento de Pedidos**: Assumiu-se que o gerenciamento dos pedidos será manual, e o status de um pedido deverá ser atualizado via solicitação HTTP (endpoint `PATCH /orders/:id`).
-- **Operações de Exclusão**: Não foram implementadas, uma vez que as regras de negócio para exclusão de pedidos e clientes não foram definidas até o momento.
+- **Operações de Exclusão**: Optou-se por fazer o delete logico atraves do atributo `deletedAt` para não adicionar complexidade extra nessa atapa do projeto.
 
 
 # Getting Started
