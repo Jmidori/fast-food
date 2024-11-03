@@ -61,6 +61,7 @@ export default class OrderRepository implements IOrderRepository {
       total: order.total,
       order_number: order.orderNumber,
       payment_method: order.paymentMethod,
+      createdAt: new Date(),
     });
 
     const orderItemsModelShadowCopy = order.orderItems.map((orderItem) => {
@@ -82,6 +83,7 @@ export default class OrderRepository implements IOrderRepository {
     await OrderModel.update(
       {
         status: order.status,
+        completedAt: order.completedAt,
       },
       {
         where: {

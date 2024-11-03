@@ -63,7 +63,7 @@ Responsável pela transformação e adaptação de schemas, de acordo com as esp
 ## Executando via Docker
 1. Para iniciar a aplicação, configurar o banco de dados e criar as tabelas necessárias, execute o seguinte comando no diretório raiz do projeto:
 ```bash
-docker-compose up
+docker-compose up --build
 ```
 A aplicação roda na porta 3000.
 

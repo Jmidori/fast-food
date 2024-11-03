@@ -85,6 +85,7 @@ router.post(
     const newOrder = new Order(
       OrderStatus.Recebido,
       PaymentMethod.QRCODE,
+      new Date(),
       customer,
       orderItems
     );
@@ -109,7 +110,7 @@ router.patch(
       return;
     }
 
-    order.status = status as OrderStatus;
+    order.setStatus(status as OrderStatus);
     const orderUpdated = await orderRepository.update(order);
 
     res

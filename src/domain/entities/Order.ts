@@ -14,13 +14,18 @@ export class Order {
 
   orderItems: OrderItem[];
 
+  createdAt: Date;
+  completedAt: Date | null = null;
+
   constructor(
     status: OrderStatus,
     paymentMethod: PaymentMethod,
+    createdAt: Date,
     customer: Customer | null,
     orderItems: OrderItem[],
     id: number | null = null,
-    orderNumber: string | null = null
+    orderNumber: string | null = null,
+    completedAt: Date | null = null
   ) {
     this.id = id;
     this.orderNumber = orderNumber ?? generateRandomString(5);
@@ -33,6 +38,25 @@ export class Order {
       (accumulator, currentValue) => accumulator + currentValue.total,
       0
     );
+
+    this.createdAt = createdAt;
+    this.completedAt = completedAt;
+  }
+
+  setStatus(newStatus: OrderStatus) {
+    if (newStatus === OrderStatus.Finalizado) {
+      this.completedAt = new Date();
+    }
+
+    this.status = newStatus;
+  }
+
+  getExecutionTimeInMs(): number {
+    if (this.status === OrderStatus.Finalizado) {
+      return (this.completedAt as Date).getTime() - this.createdAt.getTime();
+    }
+
+    return new Date().getTime() - this.createdAt.getTime();
   }
 }
 

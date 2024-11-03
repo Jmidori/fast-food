@@ -1,4 +1,4 @@
-import { DataTypes, Model, Optional } from "sequelize";
+import Sequelize, { DataTypes, Model, Optional } from "sequelize";
 import CustomerModel from "./CustomerModel";
 import OrderItemModel from "./OrderItemModel";
 import getDataBaseConnection from "./DataBaseConnection";
@@ -10,6 +10,8 @@ type OrderAttributes = {
   total: number;
   order_number: string;
   payment_method: string;
+  createdAt: Date;
+  completedAt: Date | null;
 };
 
 type OrderCreationAttributes = Optional<OrderAttributes, "id">;
@@ -52,6 +54,15 @@ OrderModel.init(
     },
     payment_method: {
       type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.fn("NOW")
+    },
+    completedAt: {
+      type: DataTypes.DATE,
       allowNull: true,
     },
   },

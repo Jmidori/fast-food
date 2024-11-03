@@ -22,7 +22,8 @@ export default class OrderAdapter {
   }
 
   modelToDomain(orderModel: OrderModel): Order {
-    const { id, status, order_number, payment_method } = orderModel.dataValues;
+    const { id, status, order_number, payment_method, createdAt, completedAt } =
+      orderModel.dataValues;
 
     const customerModel = (orderModel.dataValues as any).customer;
     const customer = customerModel
@@ -41,15 +42,22 @@ export default class OrderAdapter {
     return new Order(
       status as OrderStatus,
       payment_method as PaymentMethod,
+      createdAt,
       customer,
       orderItems,
       id,
-      order_number
+      order_number,
+      completedAt
     );
   }
 
   domainToGetOrderResponse(order: Order): GetOrderResponse {
     const { id, status, orderNumber } = order;
-    return new GetOrderResponse(id as number, status, orderNumber);
+    return new GetOrderResponse(
+      id as number,
+      status,
+      orderNumber,
+      order.getExecutionTimeInMs()
+    );
   }
 }
