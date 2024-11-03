@@ -10,14 +10,14 @@ export class Order {
 
   total: number;
 
-  customer: Customer;
+  customer: Customer | null;
 
   orderItems: OrderItem[];
 
   constructor(
     status: OrderStatus,
     paymentMethod: PaymentMethod,
-    customer: Customer,
+    customer: Customer | null,
     orderItems: OrderItem[],
     id: number | null = null,
     orderNumber: string | null = null

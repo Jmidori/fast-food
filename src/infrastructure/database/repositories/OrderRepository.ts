@@ -56,7 +56,7 @@ export default class OrderRepository implements IOrderRepository {
 
   async create(order: Order): Promise<Order | null> {
     const orderModel = await OrderModel.create({
-      customer_id: order.customer.id as number,
+      customer_id: order.customer?.id ?? null,
       status: order.status,
       total: order.total,
       order_number: order.orderNumber,

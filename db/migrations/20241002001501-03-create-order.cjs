@@ -17,7 +17,7 @@ module.exports = {
           key: "id",
         },
         onDelete: "RESTRICT",
-        allowNull: false,
+        allowNull: true,
       },
       status: {
         type: Sequelize.ENUM,

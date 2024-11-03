@@ -1,5 +1,5 @@
 export interface CreateOrderRequest {
-  customerId: number;
+  customerId?: number;
   products: [
     {
       productId: number;

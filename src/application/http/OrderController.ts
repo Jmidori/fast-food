@@ -56,12 +56,15 @@ router.post(
   async (req: Request, res: Response) => {
     const createOrderRequest = req.body as CreateOrderRequest;
 
-    const customer = await customerRepository.findById(
-      createOrderRequest.customerId
-    );
-    if (customer === null) {
-      res.status(404).json({ message: "customer não encontrado" });
-      return;
+    let customer = null;
+    if (createOrderRequest.customerId) {
+      customer = await customerRepository.findById(
+        createOrderRequest.customerId
+      );
+      if (customer === null) {
+        res.status(404).json({ message: "customer não encontrado" });
+        return;
+      }
     }
 
     const products = await productRepository.findAllByIds(

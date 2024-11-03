@@ -5,7 +5,7 @@ import getDataBaseConnection from "./DataBaseConnection";
 
 type OrderAttributes = {
   id: number;
-  customer_id: number;
+  customer_id: number | null;
   status: string;
   total: number;
   order_number: string;
@@ -17,7 +17,7 @@ type OrderCreationAttributes = Optional<OrderAttributes, "id">;
 export default class OrderModel extends Model<
   OrderAttributes,
   OrderCreationAttributes
-> {}
+> { }
 
 OrderModel.init(
   {
@@ -34,7 +34,7 @@ OrderModel.init(
         key: "id",
       },
       onDelete: "RESTRICT",
-      allowNull: false,
+      allowNull: true,
     },
     status: {
       type: DataTypes.ENUM,

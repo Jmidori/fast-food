@@ -26,6 +26,6 @@ export default {
       uniqueItems: true,
     },
   },
-  required: ["customerId", "products"],
+  required: ["products"],
   additionalProperties: false,
 };

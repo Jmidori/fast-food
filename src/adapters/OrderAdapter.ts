@@ -24,9 +24,10 @@ export default class OrderAdapter {
   modelToDomain(orderModel: OrderModel): Order {
     const { id, status, order_number, payment_method } = orderModel.dataValues;
 
-    const customer = this.customerAdapter.modelToDomain(
-      (orderModel.dataValues as any).customer as any
-    );
+    const customerModel = (orderModel.dataValues as any).customer;
+    const customer = customerModel
+      ? this.customerAdapter.modelToDomain(customerModel)
+      : null;
 
     const orderItemsModel = (orderModel.dataValues as any).order_items as any[];
     const orderItems = orderItemsModel.map((order_item) => {

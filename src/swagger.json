@@ -539,7 +539,7 @@
           "description": "Lista de produtos e quantidades a serem incluídos no pedido"
         }
       },
-      "required": ["customerId", "products"],
+      "required": ["products"],
       "additionalProperties": false
     },
     "PatchOrderRequest": {
